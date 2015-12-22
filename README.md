@@ -21,9 +21,9 @@ $ npm install blaine
 
 ## Usage
 
-Register the package as a server plugin to enable validation for each route that does not parse — `parse: false` — into memory the request payload — `output: 'data'`. For every other route with a different configuration, the validation is skipped.
+Register the package as a server plugin to enable validation for each route that does not parse — `parse: false` — into memory, the request payload — `output: 'data'`. For every other route with a different configuration, the validation is skipped.
 
-If the validation fails, a [joi](https://github.com/hapijs/joi)-like `400 Bad Request` error is returned alongside an additional `magic-pattern: invalid` response header. If everything is ok, the response will ultimately contain a `magic-pattern: valid` header.
+If the validation fails, a [joi](https://github.com/hapijs/joi)-like `400 Bad Request` error is returned alongside an additional `content-validation: failure` response header. If everything is ok, the response will ultimately contain a `content-validation: success` header.
 
 ### Example
 
@@ -64,7 +64,7 @@ server.register(plugin, (err) => {
 
 ## Supported File Types
 
-The same as [magik](https://github.com/ruiquelhas/magik).
+The same as [magik](https://github.com/ruiquelhas/magik#supported-file-types).
 
 [coveralls-img]: https://coveralls.io/repos/ruiquelhas/blaine/badge.svg
 [coveralls-url]: https://coveralls.io/github/ruiquelhas/blaine
