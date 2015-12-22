@@ -36,7 +36,7 @@
     "stream-to-promise": "1.x.x"
   },
   "dependencies": {
-    "copperfield": "1.x.x",
+    "copperfield": "2.x.x",
     "subtext": "3.x.x",
     "wreck": "7.x.x"
   },
