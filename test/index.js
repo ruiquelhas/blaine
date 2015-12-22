@@ -69,7 +69,7 @@ lab.experiment('blaine', () => {
         server.inject({ method: 'POST', url: '/ignore' }, (response) => {
 
             Code.expect(response.statusCode).to.equal(200);
-            Code.expect(response.headers['magic-pattern']).to.not.exist();
+            Code.expect(response.headers['content-validation']).to.not.exist();
             done();
         });
     });
@@ -84,7 +84,7 @@ lab.experiment('blaine', () => {
             server.inject({ method: 'POST', payload: payload, url: '/main' }, (response) => {
 
                 Code.expect(response.statusCode).to.equal(200);
-                Code.expect(response.headers['magic-pattern']).to.not.exist();
+                Code.expect(response.headers['content-validation']).to.not.exist();
                 done();
             });
         });
@@ -103,7 +103,7 @@ lab.experiment('blaine', () => {
             server.inject({ headers: { 'Content-Type': 'application/json' }, method: 'POST', payload: payload, url: '/main' }, (response) => {
 
                 Code.expect(response.statusCode).to.equal(400);
-                Code.expect(response.headers['magic-pattern']).to.not.exist();
+                Code.expect(response.headers['content-validation']).to.not.exist();
                 done();
             });
         });
