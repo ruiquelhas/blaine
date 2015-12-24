@@ -81,7 +81,7 @@ lab.experiment('blaine', () => {
 
         streamToPromise(form).then((payload) => {
 
-            server.inject({ method: 'POST', payload: payload, url: '/main' }, (response) => {
+            server.inject({ headers: form.getHeaders(), method: 'POST', payload: payload, url: '/main' }, (response) => {
 
                 Code.expect(response.statusCode).to.equal(200);
                 Code.expect(response.headers['content-validation']).to.not.exist();
@@ -102,7 +102,7 @@ lab.experiment('blaine', () => {
 
             server.inject({ headers: { 'Content-Type': 'application/json' }, method: 'POST', payload: payload, url: '/main' }, (response) => {
 
-                Code.expect(response.statusCode).to.equal(400);
+                Code.expect(response.statusCode).to.equal(415);
                 Code.expect(response.headers['content-validation']).to.not.exist();
                 done();
             });
