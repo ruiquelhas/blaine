@@ -1,5 +1,17 @@
 # Changelog
 
+## [v4.0.0](https://github.com/ruiquelhas/blaine/tree/v4.0.0) (2016-02-21)
+[Full Changelog](https://github.com/ruiquelhas/blaine/compare/v3.0.0...v4.0.0)
+
+**Implemented enhancements:**
+
+- Original payload in the handler [\#10](https://github.com/ruiquelhas/blaine/issues/10)
+- Keep the original payload at the handler level [\#11](https://github.com/ruiquelhas/blaine/pull/11) ([ruiquelhas](https://github.com/ruiquelhas))
+
+**Closed issues:**
+
+- Add missing peer dependencies [\#9](https://github.com/ruiquelhas/blaine/issues/9)
+
 ## [v3.0.0](https://github.com/ruiquelhas/blaine/tree/v3.0.0) (2015-12-24)
 [Full Changelog](https://github.com/ruiquelhas/blaine/compare/v2.0.0...v3.0.0)
 
