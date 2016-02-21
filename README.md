@@ -33,7 +33,7 @@ Also, if the `Content-Type` request header is not `multipart/form-data`, a `415 
 const Hapi = require('hapi');
 const Blaine = require('blaine');
 
-server = new Hapi.Server();
+const server = new Hapi.Server();
 server.connection({
     // go nuts
 });
