@@ -1,5 +1,16 @@
 # Changelog
 
+## [v5.0.0](https://github.com/ruiquelhas/blaine/tree/v5.0.0) (2016-03-31)
+[Full Changelog](https://github.com/ruiquelhas/blaine/compare/v4.0.0...v5.0.0)
+
+**Closed issues:**
+
+- Update copperfield to version 3.0.0 [\#12](https://github.com/ruiquelhas/blaine/issues/12)
+
+**Merged pull requests:**
+
+- Update dependencies [\#13](https://github.com/ruiquelhas/blaine/pull/13) ([ruiquelhas](https://github.com/ruiquelhas))
+
 ## [v4.0.0](https://github.com/ruiquelhas/blaine/tree/v4.0.0) (2016-02-21)
 [Full Changelog](https://github.com/ruiquelhas/blaine/compare/v3.0.0...v4.0.0)
 
