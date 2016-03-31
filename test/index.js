@@ -71,7 +71,7 @@ lab.experiment('blaine', () => {
         server.inject({ method: 'POST', url: '/ignore' }, (response) => {
 
             Code.expect(response.statusCode).to.equal(200);
-            Code.expect(response.headers['content-validation']).to.not.exist();
+            Code.expect(response.headers['content-validation']).to.equal('success');
             Code.expect(response.headers['content-type']).to.not.exist();
             done();
         });
@@ -87,7 +87,7 @@ lab.experiment('blaine', () => {
             server.inject({ headers: form.getHeaders(), method: 'POST', payload: payload, url: '/main' }, (response) => {
 
                 Code.expect(response.statusCode).to.equal(200);
-                Code.expect(response.headers['content-validation']).to.not.exist();
+                Code.expect(response.headers['content-validation']).to.equal('success');
                 Code.expect(Content.type(response.headers['content-type']).mime).to.equal('application/octet-stream');
                 done();
             });
@@ -117,7 +117,7 @@ lab.experiment('blaine', () => {
     lab.test('should return control to the server if all files the in payload are allowed', (done) => {
 
         const png = Path.join(Os.tmpdir(), 'foo.png');
-        Fs.createWriteStream(png).end(new Buffer([0x89, 0x50]));
+        Fs.createWriteStream(png).end(new Buffer('89504e47', 'hex'));
 
         const form = new FormData();
         form.append('file1', Fs.createReadStream(png));
