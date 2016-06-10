@@ -32,10 +32,9 @@
     "code": "2.x.x",
     "content": "3.x.x",
     "coveralls": "2.x.x",
-    "form-data": "0.x.x",
     "hapi": "13.x.x",
     "lab": "10.x.x",
-    "stream-to-promise": "1.x.x"
+    "multi-part": "1.x.x"
   },
   "dependencies": {
     "copperfield": "3.x.x",

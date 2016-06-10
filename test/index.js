@@ -6,10 +6,9 @@ const Path = require('path');
 
 const Code = require('code');
 const Content = require('content');
-const FormData = require('form-data');
+const Form = require('multi-part').buffer;
 const Hapi = require('hapi');
 const Lab = require('lab');
-const StreamToPromise = require('stream-to-promise');
 
 const Blaine = require('../lib/');
 
@@ -79,12 +78,16 @@ lab.experiment('blaine', () => {
 
     lab.test('should return control to the server if the payload does not contain any file', (done) => {
 
-        const form = new FormData();
+        const form = new Form();
         form.append('foo', 'bar');
 
-        StreamToPromise(form).then((payload) => {
+        form.getWithOptions((err, data) => {
 
-            server.inject({ headers: form.getHeaders(), method: 'POST', payload: payload, url: '/main' }, (response) => {
+            if (err) {
+                return done(err);
+            }
+
+            server.inject({ headers: data.headers, method: 'POST', payload: data.body, url: '/main' }, (response) => {
 
                 Code.expect(response.statusCode).to.equal(200);
                 Code.expect(response.headers['content-validation']).to.equal('success');
@@ -99,12 +102,16 @@ lab.experiment('blaine', () => {
         const png = Path.join(Os.tmpdir(), 'foo.png');
         Fs.createWriteStream(png).end(new Buffer([0x89, 0x50]));
 
-        const form = new FormData();
+        const form = new Form();
         form.append('file', Fs.createReadStream(png));
 
-        StreamToPromise(form).then((payload) => {
+        form.getWithOptions((err, data) => {
 
-            server.inject({ headers: { 'Content-Type': 'application/json' }, method: 'POST', payload: payload, url: '/main' }, (response) => {
+            if (err) {
+                return done(err);
+            }
+
+            server.inject({ headers: { 'Content-Type': 'application/json' }, method: 'POST', payload: data.body, url: '/main' }, (response) => {
 
                 Code.expect(response.statusCode).to.equal(415);
                 Code.expect(response.headers['content-validation']).to.not.exist();
@@ -119,14 +126,18 @@ lab.experiment('blaine', () => {
         const png = Path.join(Os.tmpdir(), 'foo.png');
         Fs.createWriteStream(png).end(new Buffer('89504e47', 'hex'));
 
-        const form = new FormData();
+        const form = new Form();
         form.append('file1', Fs.createReadStream(png));
         form.append('file2', Fs.createReadStream(png));
         form.append('foo', 'bar');
 
-        StreamToPromise(form).then((payload) => {
+        form.getWithOptions((err, data) => {
 
-            server.inject({ headers: form.getHeaders(), method: 'POST', payload: payload, url: '/main' }, (response) => {
+            if (err) {
+                return done(err);
+            }
+
+            server.inject({ headers: data.headers, method: 'POST', payload: data.body, url: '/main' }, (response) => {
 
                 Code.expect(response.statusCode).to.equal(200);
                 Code.expect(response.headers['content-validation']).to.equal('success');
