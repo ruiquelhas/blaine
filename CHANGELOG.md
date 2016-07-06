@@ -1,5 +1,12 @@
 # Changelog
 
+## [v5.0.2](https://github.com/ruiquelhas/blaine/tree/v5.0.2) (2016-07-06)
+[Full Changelog](https://github.com/ruiquelhas/blaine/compare/v5.0.1...v5.0.2)
+
+**Merged pull requests:**
+
+- Simplify test suite [\#15](https://github.com/ruiquelhas/blaine/pull/15) ([ruiquelhas](https://github.com/ruiquelhas))
+
 ## [v5.0.1](https://github.com/ruiquelhas/blaine/tree/v5.0.1) (2016-06-10)
 [Full Changelog](https://github.com/ruiquelhas/blaine/compare/v5.0.0...v5.0.1)
 

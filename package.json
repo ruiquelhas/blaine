@@ -1,6 +1,6 @@
 {
   "name": "blaine",
-  "version": "5.0.1",
+  "version": "5.0.2",
   "description": "File type validation for hapi raw in-memory request payloads",
   "main": "lib/index.js",
   "scripts": {
