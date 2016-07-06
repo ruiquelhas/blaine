@@ -6,7 +6,7 @@ const Path = require('path');
 
 const Code = require('code');
 const Content = require('content');
-const Form = require('multi-part').buffer;
+const Form = require('multi-part');
 const Hapi = require('hapi');
 const Lab = require('lab');
 
@@ -81,19 +81,12 @@ lab.experiment('blaine', () => {
         const form = new Form();
         form.append('foo', 'bar');
 
-        form.getWithOptions((err, data) => {
+        server.inject({ headers: form.getHeaders(), method: 'POST', payload: form.get(), url: '/main' }, (response) => {
 
-            if (err) {
-                return done(err);
-            }
-
-            server.inject({ headers: data.headers, method: 'POST', payload: data.body, url: '/main' }, (response) => {
-
-                Code.expect(response.statusCode).to.equal(200);
-                Code.expect(response.headers['content-validation']).to.equal('success');
-                Code.expect(Content.type(response.headers['content-type']).mime).to.equal('application/octet-stream');
-                done();
-            });
+            Code.expect(response.statusCode).to.equal(200);
+            Code.expect(response.headers['content-validation']).to.equal('success');
+            Code.expect(Content.type(response.headers['content-type']).mime).to.equal('application/octet-stream');
+            done();
         });
     });
 
@@ -105,19 +98,12 @@ lab.experiment('blaine', () => {
         const form = new Form();
         form.append('file', Fs.createReadStream(png));
 
-        form.getWithOptions((err, data) => {
+        server.inject({ headers: { 'Content-Type': 'application/json' }, method: 'POST', payload: form.get(), url: '/main' }, (response) => {
 
-            if (err) {
-                return done(err);
-            }
-
-            server.inject({ headers: { 'Content-Type': 'application/json' }, method: 'POST', payload: data.body, url: '/main' }, (response) => {
-
-                Code.expect(response.statusCode).to.equal(415);
-                Code.expect(response.headers['content-validation']).to.not.exist();
-                Code.expect(Content.type(response.headers['content-type']).mime).to.equal('application/json');
-                done();
-            });
+            Code.expect(response.statusCode).to.equal(415);
+            Code.expect(response.headers['content-validation']).to.not.exist();
+            Code.expect(Content.type(response.headers['content-type']).mime).to.equal('application/json');
+            done();
         });
     });
 
@@ -131,19 +117,12 @@ lab.experiment('blaine', () => {
         form.append('file2', Fs.createReadStream(png));
         form.append('foo', 'bar');
 
-        form.getWithOptions((err, data) => {
+        server.inject({ headers: form.getHeaders(), method: 'POST', payload: form.get(), url: '/main' }, (response) => {
 
-            if (err) {
-                return done(err);
-            }
-
-            server.inject({ headers: data.headers, method: 'POST', payload: data.body, url: '/main' }, (response) => {
-
-                Code.expect(response.statusCode).to.equal(200);
-                Code.expect(response.headers['content-validation']).to.equal('success');
-                Code.expect(Content.type(response.headers['content-type']).mime).to.equal('application/octet-stream');
-                done();
-            });
+            Code.expect(response.statusCode).to.equal(200);
+            Code.expect(response.headers['content-validation']).to.equal('success');
+            Code.expect(Content.type(response.headers['content-type']).mime).to.equal('application/octet-stream');
+            done();
         });
     });
 });
