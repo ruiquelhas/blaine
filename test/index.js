@@ -93,7 +93,7 @@ lab.experiment('blaine', () => {
     lab.test('should return error if the payload cannot be parsed', (done) => {
 
         const png = Path.join(Os.tmpdir(), 'foo.png');
-        Fs.createWriteStream(png).end(new Buffer([0x89, 0x50]));
+        Fs.createWriteStream(png).end(Buffer.from('89504e47', 'hex'));
 
         const form = new Form();
         form.append('file', Fs.createReadStream(png));
@@ -110,7 +110,7 @@ lab.experiment('blaine', () => {
     lab.test('should return control to the server if all files the in payload are allowed', (done) => {
 
         const png = Path.join(Os.tmpdir(), 'foo.png');
-        Fs.createWriteStream(png).end(new Buffer('89504e47', 'hex'));
+        Fs.createWriteStream(png).end(Buffer.from('89504e47', 'hex'));
 
         const form = new Form();
         form.append('file1', Fs.createReadStream(png));
