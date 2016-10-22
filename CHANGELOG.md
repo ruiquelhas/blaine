@@ -1,5 +1,12 @@
 # Changelog
 
+## [v5.0.3](https://github.com/ruiquelhas/blaine/tree/v5.0.3) (2016-10-22)
+[Full Changelog](https://github.com/ruiquelhas/blaine/compare/v5.0.2...v5.0.3)
+
+**Merged pull requests:**
+
+- Update dependencies [\#16](https://github.com/ruiquelhas/blaine/pull/16) ([ruiquelhas](https://github.com/ruiquelhas))
+
 ## [v5.0.2](https://github.com/ruiquelhas/blaine/tree/v5.0.2) (2016-07-06)
 [Full Changelog](https://github.com/ruiquelhas/blaine/compare/v5.0.1...v5.0.2)
 
