@@ -17,6 +17,7 @@ const lab = exports.lab = Lab.script();
 lab.experiment('blaine', () => {
 
     let server;
+    let png;
 
     lab.before((done) => {
 
@@ -65,6 +66,12 @@ lab.experiment('blaine', () => {
         });
     });
 
+    lab.beforeEach((done) => {
+        // Create fake png file
+        png = Path.join(Os.tmpdir(), 'foo.png');
+        Fs.createWriteStream(png).on('error', done).end(Buffer.from('89504e47', 'hex'), done);
+    });
+
     lab.test('should return control to the server if the route parses or does not handle in-memory request payload', (done) => {
 
         server.inject({ method: 'POST', url: '/ignore' }, (response) => {
@@ -92,9 +99,6 @@ lab.experiment('blaine', () => {
 
     lab.test('should return error if the payload cannot be parsed', (done) => {
 
-        const png = Path.join(Os.tmpdir(), 'foo.png');
-        Fs.createWriteStream(png).end(Buffer.from('89504e47', 'hex'));
-
         const form = new Form();
         form.append('file', Fs.createReadStream(png));
 
@@ -108,9 +112,6 @@ lab.experiment('blaine', () => {
     });
 
     lab.test('should return control to the server if all files the in payload are allowed', (done) => {
-
-        const png = Path.join(Os.tmpdir(), 'foo.png');
-        Fs.createWriteStream(png).end(Buffer.from('89504e47', 'hex'));
 
         const form = new Form();
         form.append('file1', Fs.createReadStream(png));
