@@ -32,8 +32,8 @@
     "code": "4.x.x",
     "content": "3.x.x",
     "coveralls": "2.x.x",
-    "hapi": "15.x.x",
-    "lab": "11.x.x",
+    "hapi": "16.x.x",
+    "lab": "12.x.x",
     "multi-part": "2.x.x"
   },
   "dependencies": {
