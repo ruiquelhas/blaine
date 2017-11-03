@@ -19,21 +19,20 @@ lab.experiment('blaine', () => {
     let server;
     let png;
 
-    lab.before((done) => {
+    lab.before(async () => {
 
         server = new Hapi.Server();
-        server.connection();
 
         const plugin = {
-            register: Blaine,
+            plugin: Blaine,
             options: {
-                whitelist: ['png']
+                whitelist: ['image/png']
             }
         };
 
         const main = {
-            config: {
-                handler: (request, reply) => reply(request.payload),
+            options: {
+                handler: (request) => request.payload,
                 payload: {
                     output: 'data',
                     parse: false
@@ -45,7 +44,7 @@ lab.experiment('blaine', () => {
 
         const ignore = {
             config: {
-                handler: (request, reply) => reply(),
+                handler: (request) => null,
                 payload: {
                     output: 'stream',
                     parse: true
@@ -55,75 +54,87 @@ lab.experiment('blaine', () => {
             path: '/ignore'
         };
 
-        server.register(plugin, (err) => {
+        await server.register(plugin);
 
-            if (err) {
-                return done(err);
-            }
-
-            server.route([main, ignore]);
-            done();
-        });
+        server.route([main, ignore]);
     });
 
-    lab.beforeEach((done) => {
+    lab.beforeEach(() => {
         // Create fake png file
         png = Path.join(Os.tmpdir(), 'foo.png');
-        Fs.createWriteStream(png).on('error', done).end(Buffer.from('89504e47', 'hex'), done);
-    });
 
-    lab.test('should return control to the server if the route parses or does not handle in-memory request payload', (done) => {
+        return new Promise((resolve, reject) => {
 
-        server.inject({ method: 'POST', url: '/ignore' }, (response) => {
-
-            Code.expect(response.statusCode).to.equal(200);
-            Code.expect(response.headers['content-validation']).to.equal('success');
-            Code.expect(response.headers['content-type']).to.not.exist();
-            done();
+            Fs.createWriteStream(png)
+                .on('error', reject)
+                .end(Buffer.from('89504e470d0a1a0a', 'hex'), resolve);
         });
     });
 
-    lab.test('should return control to the server if the payload does not contain any file', (done) => {
+    lab.test('should return control to the server if the route parses or does not handle in-memory request payloads', async () => {
+
+        const { headers, statusCode } = await server.inject({
+            method: 'POST',
+            url: '/ignore'
+        });
+
+        Code.expect(statusCode).to.equal(200);
+        Code.expect(headers['content-validation']).to.equal('success');
+        Code.expect(headers['content-type']).to.not.exist();
+    });
+
+    lab.test('should return control to the server if the payload does not contain any file', async () => {
 
         const form = new Form();
         form.append('foo', 'bar');
 
-        server.inject({ headers: form.getHeaders(), method: 'POST', payload: form.stream(), url: '/main' }, (response) => {
-
-            Code.expect(response.statusCode).to.equal(200);
-            Code.expect(response.headers['content-validation']).to.equal('success');
-            Code.expect(Content.type(response.headers['content-type']).mime).to.equal('application/octet-stream');
-            done();
+        const { headers, statusCode } = await server.inject({
+            headers: form.getHeaders(),
+            method: 'POST',
+            payload: form.stream(),
+            url: '/main'
         });
+
+        Code.expect(statusCode).to.equal(200);
+        Code.expect(headers['content-validation']).to.equal('success');
+        Code.expect(Content.type(headers['content-type']).mime).to.equal('application/octet-stream');
     });
 
-    lab.test('should return error if the payload cannot be parsed', (done) => {
+    lab.test('should return error if the payload cannot be parsed', async () => {
 
         const form = new Form();
         form.append('file', Fs.createReadStream(png));
 
-        server.inject({ headers: { 'Content-Type': 'application/json' }, method: 'POST', payload: form.stream(), url: '/main' }, (response) => {
-
-            Code.expect(response.statusCode).to.equal(415);
-            Code.expect(response.headers['content-validation']).to.not.exist();
-            Code.expect(Content.type(response.headers['content-type']).mime).to.equal('application/json');
-            done();
+        const { headers, statusCode } = await server.inject({
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            method: 'POST',
+            payload: form.stream(),
+            url: '/main'
         });
+
+        Code.expect(statusCode).to.equal(415);
+        Code.expect(headers['content-validation']).to.not.exist();
+        Code.expect(Content.type(headers['content-type']).mime).to.equal('application/json');
     });
 
-    lab.test('should return control to the server if all files the in payload are allowed', (done) => {
+    lab.test('should return control to the server if all files the in payload are allowed', async () => {
 
         const form = new Form();
         form.append('file1', Fs.createReadStream(png));
         form.append('file2', Fs.createReadStream(png));
         form.append('foo', 'bar');
 
-        server.inject({ headers: form.getHeaders(), method: 'POST', payload: form.stream(), url: '/main' }, (response) => {
-
-            Code.expect(response.statusCode).to.equal(200);
-            Code.expect(response.headers['content-validation']).to.equal('success');
-            Code.expect(Content.type(response.headers['content-type']).mime).to.equal('application/octet-stream');
-            done();
+        const { headers, statusCode } = await server.inject({
+            headers: form.getHeaders(),
+            method: 'POST',
+            payload: form.stream(),
+            url: '/main'
         });
+
+        Code.expect(statusCode).to.equal(200);
+        Code.expect(headers['content-validation']).to.equal('success');
+        Code.expect(Content.type(headers['content-type']).mime).to.equal('application/octet-stream');
     });
 });
