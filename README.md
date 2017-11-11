@@ -3,7 +3,7 @@ File type validation for [hapi](https://github.com/hapijs/hapi) raw in-memory `m
 
 Like most modern magicians, builds on the work, knowledge and influence of others before it, in this case, [copperfield](https://github.com/ruiquelhas/copperfield).
 
-[![NPM Version][fury-img]][fury-url] [![Build Status][travis-img]][travis-url] [![Coverage Status][coveralls-img]][coveralls-url] [![Dependencies][david-img]][david-url]
+[![NPM Version][version-img]][version-url] [![Build Status][travis-img]][travis-url] [![Coverage Status][coveralls-img]][coveralls-url] [![Dependencies][david-img]][david-url] [![Dev Dependencies][david-dev-img]][david-dev-url]
 
 ## Table of Contents
 
@@ -20,7 +20,6 @@ $ npm install blaine
 ```
 
 ## Usage
-
 Register the package as a server plugin to enable validation for each route that does not parse — `parse: false` — into memory, the request payload — `output: 'data'`. For every other route with a different configuration, the validation is skipped.
 
 If the validation fails, a [joi](https://github.com/hapijs/joi)-like `400 Bad Request` error is returned alongside an additional `content-validation: failure` response header. If everything is ok, the response will ultimately contain a `content-validation: success` header.
@@ -33,23 +32,20 @@ Also, if the `Content-Type` request header is not `multipart/form-data`, a `415 
 const Hapi = require('hapi');
 const Blaine = require('blaine');
 
-const server = new Hapi.Server();
-server.connection({
-    // go nuts
-});
+try {
+    const server = new Hapi.Server();
 
-const plugin = {
-    register: Blaine,
-    options: {
-        // Allow png files only
-        whitelist: ['image/png']
-    }
-};
-
-server.register(plugin, (err) => {
+    await server.register({
+        plugin: Blaine,
+        options: {
+            // Allow png files only
+            whitelist: ['image/png']
+        }
+    });
 
     server.route({
-        config: {
+        // go nuts
+        options: {
             payload: {
                 output: 'data',
                 parse: false
@@ -58,21 +54,23 @@ server.register(plugin, (err) => {
         }
     });
 
-    server.start(() => {
-        // go nuts
-    });
-});
+    await server.start();
+}
+catch (err) {
+    throw err;
+}
 ```
 
 ## Supported File Types
+The same as [file-type](https://github.com/sindresorhus/file-type/tree/v7.0.0#supported-file-types).
 
-The same as [file-type](https://github.com/sindresorhus/file-type#supported-file-types).
-
-[coveralls-img]: https://coveralls.io/repos/ruiquelhas/blaine/badge.svg
+[coveralls-img]: https://img.shields.io/coveralls/ruiquelhas/blaine.svg?style=flat-square
 [coveralls-url]: https://coveralls.io/github/ruiquelhas/blaine
-[david-img]: https://david-dm.org/ruiquelhas/blaine.svg
+[david-img]: https://img.shields.io/david/ruiquelhas/blaine.svg?style=flat-square
 [david-url]: https://david-dm.org/ruiquelhas/blaine
-[fury-img]: https://badge.fury.io/js/blaine.svg
-[fury-url]: https://badge.fury.io/js/blaine
-[travis-img]: https://travis-ci.org/ruiquelhas/blaine.svg
+[david-dev-img]: https://img.shields.io/david/dev/ruiquelhas/blaine.svg?style=flat-square
+[david-dev-url]: https://david-dm.org/ruiquelhas/blaine?type=dev
+[version-img]: https://img.shields.io/npm/v/blaine.svg?style=flat-square
+[version-url]: https://www.npmjs.com/package/blaine
+[travis-img]: https://img.shields.io/travis/ruiquelhas/blaine.svg?style=flat-square
 [travis-url]: https://travis-ci.org/ruiquelhas/blaine
