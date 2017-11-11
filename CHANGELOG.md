@@ -1,10 +1,22 @@
 # Changelog
 
+## [v6.0.0](https://github.com/ruiquelhas/blaine/tree/v6.0.0) (2017-11-11)
+[Full Changelog](https://github.com/ruiquelhas/blaine/compare/v5.0.6...v6.0.0)
+
+**Closed issues:**
+
+- Add support for hapi v17 [\#21](https://github.com/ruiquelhas/blaine/issues/21)
+
+**Merged pull requests:**
+
+- Add support for hapi v17 [\#22](https://github.com/ruiquelhas/blaine/pull/22) ([ruiquelhas](https://github.com/ruiquelhas))
+
 ## [v5.0.6](https://github.com/ruiquelhas/blaine/tree/v5.0.6) (2017-02-10)
 [Full Changelog](https://github.com/ruiquelhas/blaine/compare/v5.0.5...v5.0.6)
 
 **Fixed bugs:**
 
+- Flaky tests run without file fixtures available [\#19](https://github.com/ruiquelhas/blaine/issues/19)
 - Fix file fixtures availability [\#20](https://github.com/ruiquelhas/blaine/pull/20) ([ruiquelhas](https://github.com/ruiquelhas))
 
 ## [v5.0.5](https://github.com/ruiquelhas/blaine/tree/v5.0.5) (2016-11-02)
